@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "module": "esnext",
     "resolveJsonModule": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx", 
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src"

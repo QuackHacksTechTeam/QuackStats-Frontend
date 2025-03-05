@@ -1,17 +1,14 @@
 import React from 'react';
+import BarChartComponent from './commit_chart';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Welcome to My React App!</h1>
-        <p>
-          This is a basic setup using TypeScript and React.
-        </p>
-      </header>
+      <h1>GitHub Commits</h1>
+      <BarChartComponent />
     </div>
   );
-}
+};
 
 export default App;
 
