@@ -5,10 +5,9 @@ export type UserCommit = {
     commits: number
 }
 
-export type CommitResponse = {
-    owner: string, 
-    name: string, 
-    user_commits: Record<string, number> 
+export type RepoCommit = {
+    repo_name: string, 
+    commits: number
 }
 
 

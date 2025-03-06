@@ -1,14 +1,19 @@
 import React from 'react';
-import BarChartComponent from './commit_chart';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import RepoCommitPage from "./pages/repo_commit_page";
+import UserCommitPage from "./pages/user_commit_page";
+
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>GitHub Commits</h1>
-      <BarChartComponent />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<UserCommitPage />} />
+        <Route path="/repo-commits" element={<RepoCommitPage />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
 
