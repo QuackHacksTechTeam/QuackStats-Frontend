@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_URL = "https://localhost:3000"
+const BASE_URL = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
 
 const axiosInstance = axios.create({
-  baseURL: API_URL, 
+  baseURL: BASE_URL, 
 });
 
 export default axiosInstance;
