@@ -4,7 +4,7 @@ import "./css/urls_in_use.css";
 
 
 const UrlsInUse: React.FC = () => {
-    const [urls, setUrls] = useState<string[]>(["test", "test", "test", "test", "test", "test", "test", "test"]);
+    const [urls, setUrls] = useState<string[]>([]);
 
     return (
         <div id="urls-in-use-container"> 
