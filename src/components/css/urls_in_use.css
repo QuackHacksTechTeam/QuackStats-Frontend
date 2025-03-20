@@ -1,0 +1,33 @@
+/* URLs In Use container */
+#urls-in-use-container {
+    background-color: #2a2a2a; /* Same background color as the other container */
+    padding: 40px; /* Increased padding for larger container */
+    border-radius: 8px; /* Rounded corners */
+    width: 500px; /* Make it wider */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    text-align: center; /* Align text to the left */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: flex-start; /* Keep items aligned to the top */
+    height: auto; /* Allow container height to grow based on content */
+}
+
+#urls-in-use-container h2 {
+    color: white;
+    font-size: 1.8rem; /* Slightly larger font size for the header */
+    margin-bottom: 20px; /* Add space below the header */
+}
+
+#urls-in-use-container ul {
+    list-style-type: none; /* Removes the bullet points */
+    padding-left: 0; /* Optional: removes default padding */
+    margin: 0; /* Remove default margin */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 300px; /* Set a maximum height for the list */
+}
+
+#urls-in-use-container li {
+    color: white;
+    font-size: 1.4rem; /* Slightly larger font for list items */
+    margin: 8px 0; /* Add space between list items */
+}

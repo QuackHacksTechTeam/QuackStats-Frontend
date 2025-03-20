@@ -1,0 +1,43 @@
+/* Global page styling */
+
+  body {
+    background-color: #1a1a1a; /* Dark grey/black color */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    height: 100vh; /* Make the body take up the full viewport height */
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    flex-direction: column; /* Stack items vertically */
+    color: white; 
+  }
+  
+  /* Container for intro section */
+  #intro-container {
+    text-align: center;
+    margin-top: -700px; 
+    position: absolute; 
+  }
+  
+  /* Title */
+  #intro-container h1 {
+    color: white;
+    font-size: 120px;
+    margin-top: 0;
+  }
+  
+  /* Subtitle */
+#intro-container h2 {
+    color: gold;
+    font-size: 30px; 
+    font-style: italic; 
+    margin-top: -40px; 
+}
+
+
+#url-inputs {
+    display: flex; /* Use flexbox to align items side by side */
+    justify-content: space-between; /* Distribute space between the items */
+    align-items: flex-start; /* Align items to the top */
+    gap: 20px; /* Add some space between the two components */
+  }
