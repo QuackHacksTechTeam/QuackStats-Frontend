@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "../axios_config";
 import "./css/urls_in_use.css";
+import "../shared_css/spinner.css";
 
 
 const UrlsInUse: React.FC = () => {
@@ -30,7 +31,13 @@ const UrlsInUse: React.FC = () => {
         <div id="urls-in-use-container"> 
             <h2>GitHub Repos In Use</h2> 
             <ul> 
-                {loading ? "Loading..." :
+                {loading ? 
+                    <div className="spinner-container"> 
+                        <div className="spinner" /> 
+                    </div> : 
+                error ? 
+                    <p>{error}</p> : 
+
                 urls.map((url, index) => (
                     <li key={index}>{url}</li>
                 ))}
