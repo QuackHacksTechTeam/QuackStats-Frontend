@@ -1,16 +1,37 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../axios_config";
 import "./css/urls_in_use.css";
 
 
 const UrlsInUse: React.FC = () => {
     const [urls, setUrls] = useState<string[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+
+    const getReposInUse = async () => {
+        try { 
+            setLoading(true);
+            const response = await axios.get("/api/repos-in-use");
+            setUrls(response.data);
+        } catch (e) { 
+            setError("Error loading response urls");
+            console.log(e);
+        } finally { 
+            setLoading(false);
+        }
+    }
+    
+    useEffect(() => {
+        getReposInUse(); 
+    }, []);
 
     return (
         <div id="urls-in-use-container"> 
             <h2>GitHub Repos In Use</h2> 
             <ul> 
-                {urls.map((url, index) => (
+                {loading ? "Loading..." :
+                urls.map((url, index) => (
                     <li key={index}>{url}</li>
                 ))}
             </ul> 
