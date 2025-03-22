@@ -27,18 +27,23 @@ const UrlsInUse: React.FC = () => {
         getReposInUse(); 
     }, []);
 
+    if (loading)
+        return (
+            <div className="spinner-container"> 
+                <div className="spinner" /> 
+            </div> 
+        );
+    
+    if (error)
+        return (
+            <p>{error}</p> 
+        )
+
     return (
         <div id="urls-in-use-container"> 
             <h2>GitHub Repos In Use</h2> 
             <ul> 
-                {loading ? 
-                    <div className="spinner-container"> 
-                        <div className="spinner" /> 
-                    </div> : 
-                error ? 
-                    <p>{error}</p> : 
-
-                urls.map((url, index) => (
+                {urls.map((url, index) => (
                     <li key={index}>{url}</li>
                 ))}
             </ul> 
