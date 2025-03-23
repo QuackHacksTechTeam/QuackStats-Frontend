@@ -30,7 +30,12 @@ const RepoCommitBarChart: React.FC = () => {
         setLoading(false);
       }
     }
+
     fetchCommits(); 
+
+    const interval = setInterval(fetchCommits, 30 * 1000);
+    return () => clearInterval(interval); 
+
   }, []);
 
 

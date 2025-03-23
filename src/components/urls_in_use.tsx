@@ -24,7 +24,9 @@ const UrlsInUse: React.FC = () => {
     }
     
     useEffect(() => {
+
         getReposInUse(); 
+
     }, []);
 
     if (loading)
