@@ -128,7 +128,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             allFetches(); 
         }
 
-        const interval = setInterval(allFetches, 10000);
+        const interval = setInterval(allFetches, 100000);
         return () => clearInterval(interval);
     }, []);
 
