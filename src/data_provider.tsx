@@ -13,6 +13,8 @@ import { RepoCommit, UserCommit, UserLOC } from "./types";
 
 */
 
+const REFRESH_TIME = 1000 * 60 * 30;  // 30 Minutes
+
 interface DataContextType {
     repoCommitData: RepoCommit[]; 
     repoCommitLoading: boolean; 
@@ -128,7 +130,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             allFetches(); 
         }
 
-        const interval = setInterval(allFetches, 100000);
+        const interval = setInterval(allFetches, REFRESH_TIME);
         return () => clearInterval(interval);
     }, []);
 
