@@ -17,19 +17,18 @@ const SquareButton: React.FC<SquareButtonProps> = ({ label, menuOptions }) => {
 
   const handleMenuClick = (route: string) => {
     navigate(route);
-    setIsMenuOpen(false); 
+    setIsMenuOpen(false);
   };
 
   return (
-    <div className="menu-button-container">
-      <button onClick={handleButtonClick}>
-        {label}
-      </button>
+    <div className='menu-button-container'>
+      <button onClick={handleButtonClick}>{label}</button>
 
       {isMenuOpen && (
-        <div className ="menu-options">
+        <div className='menu-options'>
           {menuOptions.map((option, index) => (
-            <div className="menu-options-row"
+            <div
+              className='menu-options-row'
               key={index}
               onClick={() => handleMenuClick(option.route)}
             >

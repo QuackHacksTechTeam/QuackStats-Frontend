@@ -1,0 +1,37 @@
+.fetch-status {
+    display: flex;
+    justify-content: space-between; /* Distribute space between items */
+    align-items: center;
+    width: 290px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+    background-color: #201f1f;
+    color: white;
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px;
+    font-size: 14px;
+
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000; /* Ensure it appears on top of other content */
+}
+
+.fetch-status p {
+    margin: 0;
+    color: white; 
+}
+
+.fetch-status button {
+    margin-left: 10px; /* Space between text and button */
+    padding: 5px 10px; /* Add some padding to the button */
+    background-color: gold; /* Button color */
+    color: black;
+    border: none;
+    border-radius: 5px; /* Rounded button corners */
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.fetch-status button:hover {
+    background-color: rgb(233, 207, 62); /* Button hover effect */
+}

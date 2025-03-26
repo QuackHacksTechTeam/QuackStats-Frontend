@@ -1,9 +1,7 @@
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import axios from './axios_config';
 
-
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import axios from "./axios_config";
-
-import { RepoCommit, UserCommit, UserLOC } from "./types";
+import { RepoCommit, UserCommit, UserLOC } from './types';
 
 /*
     Global state of data fetches to the server 
@@ -13,152 +11,150 @@ import { RepoCommit, UserCommit, UserLOC } from "./types";
 
 */
 
-const REFRESH_TIME = 1000 * 60 * 30;  // 30 Minutes
+const REFRESH_TIME = 1000 * 60 * 30; // 30 Minutes
 
 interface DataContextType {
-    repoCommitData: RepoCommit[]; 
-    repoCommitLoading: boolean; 
-    repoCommitError: string | null; 
+  repoCommitData: RepoCommit[];
+  repoCommitLoading: boolean;
+  repoCommitError: string | null;
+  repoCommitLastRefresh: string;
+  repoCommitRefresh: () => void;
 
-    userCommitData: UserCommit[]; 
-    userCommitLoading: boolean; 
-    userCommitError: string | null; 
+  userCommitData: UserCommit[];
+  userCommitLoading: boolean;
+  userCommitError: string | null;
+  userCommitLastRefresh: string;
+  userCommitRefresh: () => void;
 
-    userLOCData: UserLOC[]; 
-    userLOCLoading: boolean; 
-    userLOCError: string | null; 
+  userLOCData: UserLOC[];
+  userLOCLoading: boolean;
+  userLOCError: string | null;
+  userLOCLastRefresh: string;
+  userLOCRefresh: () => void;
 
-    lastRefresh: string; 
-
-    refreshData: () => void; 
+  refreshAllData: () => void;
 }
 
 const getDate = () => {
-    const currentDate = new Date();
-    const dayOfWeek = currentDate.toLocaleString('en-us', { weekday: 'long' });
+  const currentDate = new Date();
+  const dayOfWeek = currentDate.toLocaleString('en-us', { weekday: 'long' });
 
-    const hours = currentDate.getHours().toString().padStart(2, '0');
-    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
-    const time = `${hours}:${minutes}:${seconds}`;
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+  const time = `${hours}:${minutes}:${seconds}`;
 
-    return `Day: ${dayOfWeek}, Time: ${time}`;
-}
+  return `${dayOfWeek}, ${time}`;
+};
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [repoCommitData, setRepoCommitData] = useState<RepoCommit[]>([]);
-    const [repoCommitLoading, setRepoCommitLoading] = useState<boolean>(false);
-    const [repoCommitError, setRepoCommitError] = useState<string | null>(null);
+  const [repoCommitData, setRepoCommitData] = useState<RepoCommit[]>([]);
+  const [repoCommitLoading, setRepoCommitLoading] = useState<boolean>(false);
+  const [repoCommitError, setRepoCommitError] = useState<string | null>(null);
+  const [repoCommitLastRefresh, setRepoCommitLastRefresh] = useState('');
 
-    const [userCommitData, setUserCommitData] = useState<UserCommit[]>([]);
-    const [userCommitLoading, setUserCommitLoading] = useState<boolean>(false);
-    const [userCommitError, setUserCommitError] = useState<string | null>(null);
+  const [userCommitData, setUserCommitData] = useState<UserCommit[]>([]);
+  const [userCommitLoading, setUserCommitLoading] = useState<boolean>(false);
+  const [userCommitError, setUserCommitError] = useState<string | null>(null);
+  const [userCommitLastRefresh, setUserCommitLastRefresh] = useState('');
 
-    const [userLOCData, setUserLOCData] = useState<UserLOC[]>([]);
-    const [userLOCLoading, setUserLOCLoading] = useState<boolean>(false);
-    const [userLOCError, setUserLOCError] = useState<string | null>(null);
+  const [userLOCData, setUserLOCData] = useState<UserLOC[]>([]);
+  const [userLOCLoading, setUserLOCLoading] = useState<boolean>(false);
+  const [userLOCError, setUserLOCError] = useState<string | null>(null);
+  const [userLOCLastRefresh, setUserLOCLastRefresh] = useState('');
 
-    const [lastRefresh, setLastRefresh] = useState("");
-    const [firstFetch, setFirstFetch] = useState(true);
+  const [firstFetch, setFirstFetch] = useState(true);
 
-    
-    const fetchRepoCommits = async () => {
-      try { 
-        setRepoCommitLoading(true);
-        const response = await axios.get("/api/repo-commits");
-        const commit_data: RepoCommit[] = response.data; 
-        const sorted_commit_data = commit_data.sort((a, b) => b.commits - a.commits); 
-        const top_5_committers = sorted_commit_data.slice(0, 5);
+  const fetchRepoCommits = async () => {
+    try {
+      setRepoCommitLoading(true);
+      const response = await axios.get('/api/repo-commits');
+      setRepoCommitData(response.data);
+      setRepoCommitLastRefresh(getDate());
+    } catch (e: any) {
+      setRepoCommitError(e);
+      console.error(e);
+    } finally {
+      setRepoCommitLoading(false);
+    }
+  };
 
-        setRepoCommitData(top_5_committers);
+  const fetchLOC = async () => {
+    try {
+      setUserLOCLoading(true);
+      const response = await axios.get('/api/user-loc');
+      setUserLOCData(response.data);
+      setUserLOCLastRefresh(getDate());
+    } catch (e: any) {
+      setUserLOCError(e);
+      console.error(e);
+    } finally {
+      setUserLOCLoading(false);
+    }
+  };
 
-      } catch (e: any) { 
-        setRepoCommitError(e);
-        console.error(e);
+  const fetchUserCommits = async () => {
+    try {
+      setUserCommitLoading(true);
+      const response = await axios.get('/api/user-commits');
+      setUserCommitData(response.data);
+      setUserCommitLastRefresh(getDate());
+    } catch (e: any) {
+      setUserCommitError(e);
+      console.error(e);
+    } finally {
+      setUserCommitLoading(false);
+    }
+  };
+  const allFetches = async () => {
+    await Promise.all([fetchRepoCommits(), fetchUserCommits(), fetchLOC()]);
+  };
 
-      } finally { 
-        setRepoCommitLoading(false);
-      }
+  useEffect(() => {
+    if (firstFetch) {
+      setFirstFetch(false);
+      allFetches();
     }
 
-    const fetchLOC = async () => {
-      try { 
-        setUserLOCLoading(true);
-        const response = await axios.get("/api/user-loc");
-        const loc_data : UserLOC[] = response.data; 
-        const sorted_loc_data = loc_data.sort((a, b) => b.lines_of_code - a.lines_of_code); 
-        const top_5_loc = sorted_loc_data.slice(0, 5);
-        setUserLOCData(top_5_loc);
+    const interval = setInterval(allFetches, REFRESH_TIME);
+    return () => clearInterval(interval);
+  }, []);
 
-      } catch (e: any) { 
-        setUserLOCError(e);
-        console.error(e);
+  return (
+    <DataContext.Provider
+      value={{
+        repoCommitData,
+        repoCommitLoading,
+        repoCommitError,
+        repoCommitLastRefresh,
+        repoCommitRefresh: fetchRepoCommits,
 
-      } finally { 
-        setUserLOCLoading(false);
-      }
-    }
+        userCommitData,
+        userCommitLoading,
+        userCommitError,
+        userCommitLastRefresh,
+        userCommitRefresh: fetchUserCommits,
 
-    const fetchUserCommits = async () => {
-      try { 
-        setUserCommitLoading(true);
-        const response = await axios.get("/api/user-commits");
-        const commit_data: UserCommit[] = response.data; 
-        const sorted_commit_data = commit_data.sort((a, b) => b.commits - a.commits); 
-        const top_5_committers = sorted_commit_data.slice(0, 5);
+        userLOCData,
+        userLOCLoading,
+        userLOCError,
+        userLOCLastRefresh,
+        userLOCRefresh: fetchLOC,
 
-        setUserCommitData(top_5_committers);
-
-      } catch (e: any) { 
-        setUserCommitError(e);
-        console.error(e);
-
-      } finally { 
-        setUserCommitLoading(false);
-      }
-    }
-    const allFetches = async () => { 
-        await Promise.all([fetchRepoCommits(), fetchUserCommits(), fetchLOC()]); 
-        setLastRefresh(getDate());
-    }
-
-    useEffect(() => {
-        if (firstFetch) { 
-            setFirstFetch(false);
-            allFetches(); 
-        }
-
-        const interval = setInterval(allFetches, REFRESH_TIME);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-    <DataContext.Provider value={
-        { repoCommitData, 
-          repoCommitLoading, 
-          repoCommitError, 
-
-          userCommitData, 
-          userCommitLoading, 
-          userCommitError, 
-
-          userLOCData, 
-          userLOCLoading, 
-          userLOCError, 
-
-          lastRefresh, 
-          refreshData: allFetches}}>
+        refreshAllData: allFetches,
+      }}
+    >
       {children}
     </DataContext.Provider>
-    )
-}
+  );
+};
 
 export const useData = () => {
-    const context = useContext(DataContext);
-    if (!context) {
-        throw new Error("Trying to use context outside of data provider");
-    }
-    return context;
-}
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error('Trying to use context outside of data provider');
+  }
+  return context;
+};

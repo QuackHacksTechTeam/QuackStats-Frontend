@@ -1,27 +1,30 @@
-
-import React from "react";
-import "../shared_css/spinner.css";
+import React from 'react';
+import '../shared_css/spinner.css';
+import './css/fetch_status.css';
 
 interface FetchStatusProps {
-    loading: boolean; 
-    error: string | null;
-    lastRefresh: string;
+  loading: boolean;
+  error: string | null;
+  lastRefresh: string;
+  refresh: () => void;
 }
 
-const FetchStatusBar: React.FC<FetchStatusProps> = ({ loading, error, lastRefresh }) => {
-    return (
-        <div> 
-            {loading ? (
-                <div className="spinner-container">
-                    <div className="spinner"></div>
-                </div>
-            ) : error ? (
-                <p>{error}</p> 
-            ) : (
-                <p>Last refresh: {lastRefresh}</p>
-            )}
-        </div> 
-    );
-}
+const FetchStatusBar: React.FC<FetchStatusProps> = ({ loading, error, lastRefresh, refresh }) => {
+  return (
+    <div className='fetch-status'>
+      {loading ? (
+        <div className='spinner-container'>
+          <p style={{ display: 'inline', marginRight: '10px' }}>Updating</p>
+          <div className='spinner' style={{ display: 'inline' }}></div>
+        </div>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : (
+        <p>Last Refresh: {lastRefresh}</p>
+      )}
+      <button onClick={refresh}>Refresh</button>
+    </div>
+  );
+};
 
-export default FetchStatusBar; 
+export default FetchStatusBar;
