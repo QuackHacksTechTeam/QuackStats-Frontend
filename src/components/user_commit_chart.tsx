@@ -5,20 +5,7 @@ import { useData } from "../data_provider";
 
 const UserCommitBarChart: React.FC = () => {
 
-    const { userCommitData, userCommitLoading: loading, userCommitError: error} = useData(); 
-
-  if (loading) { 
-    return (
-        <div className="spinner-container">
-          <div className="spinner"></div>
-        </div>
-     );
-
-  }
-
-  if (error) { 
-    return <div>{error}</div>
-  }
+    const { userCommitData } = useData(); 
 
   return (
       <CommitBarChart 

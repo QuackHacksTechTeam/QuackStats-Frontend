@@ -6,19 +6,7 @@ import { useData } from "../data_provider";
 
 const LOCBarChart: React.FC = () => {
   
-  const { userLOCData, userLOCLoading: loading, userLOCError: error} = useData(); 
-
-  if (loading) { 
-    return (
-        <div className="spinner-container">
-          <div className="spinner"></div>
-        </div>
-     );
-  }
-
-  if (error) { 
-    return <div>{error}</div>
-  }
+  const { userLOCData } = useData(); 
 
   return (
       <BarChart 

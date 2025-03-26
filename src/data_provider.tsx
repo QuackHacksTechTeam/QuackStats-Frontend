@@ -26,7 +26,21 @@ interface DataContextType {
     userLOCLoading: boolean; 
     userLOCError: string | null; 
 
+    lastRefresh: string; 
+
     refreshData: () => void; 
+}
+
+const getDate = () => {
+    const currentDate = new Date();
+    const dayOfWeek = currentDate.toLocaleString('en-us', { weekday: 'long' });
+
+    const hours = currentDate.getHours().toString().padStart(2, '0');
+    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    const seconds = currentDate.getSeconds().toString().padStart(2, '0');
+    const time = `${hours}:${minutes}:${seconds}`;
+
+    return `Day: ${dayOfWeek}, Time: ${time}`;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -44,6 +58,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [userLOCLoading, setUserLOCLoading] = useState<boolean>(false);
     const [userLOCError, setUserLOCError] = useState<string | null>(null);
 
+    const [lastRefresh, setLastRefresh] = useState("");
     const [firstFetch, setFirstFetch] = useState(true);
 
     
@@ -102,7 +117,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUserCommitLoading(false);
       }
     }
-    const allFetches = async () => { Promise.all([fetchRepoCommits(), fetchUserCommits(), fetchLOC()]); }
+    const allFetches = async () => { 
+        await Promise.all([fetchRepoCommits(), fetchUserCommits(), fetchLOC()]); 
+        setLastRefresh(getDate());
+    }
 
     useEffect(() => {
         if (firstFetch) { 
@@ -127,7 +145,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           userLOCData, 
           userLOCLoading, 
           userLOCError, 
-          
+
+          lastRefresh, 
           refreshData: allFetches}}>
       {children}
     </DataContext.Provider>
