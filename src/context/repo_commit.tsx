@@ -16,11 +16,12 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const RepoCommitDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [commitData, setCommitData] = useState<RepoCommit[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     
     const fetchCommits = async () => {
       try { 
+        setLoading(true);
         const response = await axios.get("/api/repo-commits");
         const commit_data: RepoCommit[] = response.data; 
         const sorted_commit_data = commit_data.sort((a, b) => b.commits - a.commits); 
@@ -38,7 +39,6 @@ export const RepoCommitDataProvider: React.FC<{ children: React.ReactNode }> = (
     }
 
     useEffect(() => {
-        fetchCommits(); 
         const interval = setInterval(fetchCommits, 10000);
         return () => clearInterval(interval);
     }, []);
