@@ -102,7 +102,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUserCommitLoading(false);
       }
     }
-    const allFetches = async () => { Promise.all([fetchRepoCommits, fetchUserCommits, fetchLOC]); }
+    const allFetches = async () => { Promise.all([fetchRepoCommits(), fetchUserCommits(), fetchLOC()]); }
 
     useEffect(() => {
         if (firstFetch) { 
@@ -110,7 +110,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
             allFetches(); 
         }
 
-        const interval = setInterval(() => allFetches, 10000);
+        const interval = setInterval(allFetches, 10000);
         return () => clearInterval(interval);
     }, []);
 
