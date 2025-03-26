@@ -1,11 +1,11 @@
 
 import CommitBarChart from './bar_chart';
-import { useRepoCommitData } from "../context/repo_commit";
+import { useData } from "../data_provider";
 import './css/commit_chart.css';
 
 const RepoCommitBarChart: React.FC = () => {
   
-    const { commitData, loading, error, refreshData } = useRepoCommitData(); 
+    const { repoCommitData, repoCommitLoading: loading, repoCommitError: error} = useData(); 
 
     if (loading) { 
         return (
@@ -24,7 +24,7 @@ const RepoCommitBarChart: React.FC = () => {
         color="#00838F" 
         xaxisKey="repo_name" 
         yaxisKey="commits" 
-        data={commitData} 
+        data={repoCommitData} 
       /> 
   );
 };

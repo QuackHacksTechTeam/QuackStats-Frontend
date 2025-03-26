@@ -1,37 +1,12 @@
 
-import React, {useEffect, useState } from 'react';
-import { UserLOC } from '../types.js'
-import axios from '../axios_config.ts'
+import React from 'react';
 import './css/commit_chart.css'
-import LOCBarChart from './bar_chart';
+import BarChart from './bar_chart';
+import { useData } from "../data_provider";
 
-
-const UserCommitBarChart: React.FC = () => {
+const LOCBarChart: React.FC = () => {
   
-  const [locData, setLocData] = useState<UserLOC[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCommits = async () => {
-      try { 
-        const response = await axios.get("/api/user-loc");
-        const loc_data : UserLOC[] = response.data; 
-        const sorted_loc_data = loc_data.sort((a, b) => b.lines_of_code - a.lines_of_code); 
-        const top_5_loc = sorted_loc_data.slice(0, 5);
-        setLocData(top_5_loc);
-
-      } catch (e: any) { 
-        setError(e);
-        console.error(e);
-
-      } finally { 
-        setLoading(false);
-      }
-    }
-    fetchCommits(); 
-  }, []);
-
+  const { userLOCData, userLOCLoading: loading, userLOCError: error} = useData(); 
 
   if (loading) { 
     return (
@@ -46,14 +21,14 @@ const UserCommitBarChart: React.FC = () => {
   }
 
   return (
-      <LOCBarChart 
+      <BarChart 
         color="#FFEB3B" 
         xaxisKey="username" 
         yaxisKey="lines_of_code" 
-        data={locData} 
+        data={userLOCData} 
       /> 
   );
 };
 
-export default UserCommitBarChart;
+export default LOCBarChart;
 
